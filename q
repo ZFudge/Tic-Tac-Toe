@@ -1,0 +1,100 @@
+[1mdiff --git a/index.html b/index.html[m
+[1mindex ecebe43..f027c68 100644[m
+[1m--- a/index.html[m
+[1m+++ b/index.html[m
+[36m@@ -9,8 +9,7 @@[m
+ 	<div id="outer-container">[m
+ 		<div></div>[m
+ 		<div id="tic-tac-toe-outer-container">[m
+[31m-			<div id="tic-tac-toe-inner-container">[m
+[31m-			</div>[m
+[32m+[m			[32m<div id="tic-tac-toe-inner-container"></div>[m[41m[m
+ 		</div>[m
+ 	</div>[m
+ 	<script type="text/javascript" src="t3.js"></script>[m
+[1mdiff --git a/t3.css b/t3.css[m
+[1mindex 8187053..ff63cb5 100644[m
+[1m--- a/t3.css[m
+[1m+++ b/t3.css[m
+[36m@@ -22,9 +22,10 @@[m [mbody {[m
+ [m
+ #tic-tac-toe-inner-container {[m
+ 	display: grid;[m
+[32m+[m	[32mbox-sizing: border-box;[m[41m[m
+ 	grid-template-columns: 20px 100px 100px 100px 20px;[m
+ 	grid-template-rows: 20px 100px 100px 100px 20px;[m
+[31m-	grid-gap: 15px;[m
+[32m+[m	[32mgrid-gap: 20px;[m[41m[m
+ 	border-radius: 10px;[m
+ 	background-color: white;[m
+ [m
+[36m@@ -74,10 +75,7 @@[m [mbody {[m
+ .square {[m
+ 	height: 100px;[m
+ 	width: 100px;[m
+[31m-	border: 2px solid transparent;[m
+[31m-	color: #777;[m
+[31m-	background-color: #fafafa;[m
+[31m-	font-size: 64px;[m
+[32m+[m	[32mfont-size: 80px;[m[41m[m
+ 	font-family: sans-serif;[m
+ 	display: flex;[m
+ 	justify-content: center;[m
+[36m@@ -85,7 +83,21 @@[m [mbody {[m
+ 	font-family: 'Montserrat', sans-serif;[m
+ 	border-radius: 2px;[m
+ 	cursor: default;[m
+[31m-	box-shadow: inset -2px 3px 10px 1px #777;[m
+[32m+[m	[32mborder: 1px solid #aaa;[m[41m[m
+[32m+[m	[32mborder-left: 1px solid #bbb;[m[41m[m
+[32m+[m	[32mborder-bottom: 1px solid #bbb;[m[41m[m
+[32m+[m	[32mbox-shadow: inset -1px 2px 20px 2px #999, 2px -2px 10px 2px #999;[m[41m[m
+[32m+[m	[32mbackground-color: #fff;[m[41m[m
+[32m+[m[32m}[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m.depth {[m[41m[m
+[32m+[m	[32mbackground-color: #999;[m[41m[m
+[32m+[m	[32mcolor: rgba(0,0,0,0);[m[41m[m
+[32m+[m	[32mtext-shadow: -3px 2.5px 3px rgba(255,255,255,0.75);[m[41m[m
+[32m+[m	[32m-webkit-background-clip: text;[m[41m[m
+[32m+[m	[32m-moz-background-clip: text;[m[41m[m
+[32m+[m	[32mbackground-clip: text;[m[41m[m
+[32m+[m	[32muser-select: none;[m[41m[m
+ }[m
+ [m
+ .selected {[m
+[1mdiff --git a/t3.js b/t3.js[m
+[1mindex bea08bf..620e852 100644[m
+[1m--- a/t3.js[m
+[1m+++ b/t3.js[m
+[36m@@ -5,18 +5,25 @@[m [mconst tic = {[m
+ 	click(square) {[m
+ 		if (square.innerHTML === "") {[m
+ 			square.classList.remove("pointer");[m
+[31m-			square.innerHTML = (this.turn) ? "X" : "O";[m
+[32m+[m			[32msquare.classList.add("depth");[m[41m[m
+[32m+[m			[32msquare.innerText = (this.turn) ? "X" : "O";[m[41m[m
+ 			this.turn = !this.turn;[m
+[32m+[m			[32mthis.checkWin(square);[m[41m[m
+ 		}[m
+[32m+[m	[32m},[m[41m[m
+[32m+[m	[32mcheckWin(square) {[m[41m[m
+[32m+[m[41m		[m
+ 	}[m
+ }[m
+ [m
+ for (let i = 0; i < 3; i++) {[m
+[32m+[m	[32mtic.squares.push([]);[m[41m[m
+ 	for (let j = 0; j < 3; j++) {[m
+ 		const square = document.createElement("div");[m
+[31m-		square.setAttribute("class", `square pointer row-${j+1} col-${i+1}`);[m
+[31m-		square.id = `square-${j}-${i}`;[m
+[31m-		square.onclick = ()=>tic.click(square);[m
+[32m+[m		[32msquare.setAttribute("class", `square pointer row-${i+1} col-${j+1}`);[m[41m[m
+[32m+[m		[32msquare.id = `square-${i}-${j}`;[m[41m[m
+[32m+[m		[32msquare.onclick = () => tic.click(square);[m[41m[m
+ 		tic.board.appendChild(square);[m
+[32m+[m		[32mtic.squares[i].push(square);[m[41m[m
+ 	}	[m
+ }[m
+\ No newline at end of file[m

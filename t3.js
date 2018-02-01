@@ -5,18 +5,25 @@ const tic = {
 	click(square) {
 		if (square.innerHTML === "") {
 			square.classList.remove("pointer");
-			square.innerHTML = (this.turn) ? "X" : "O";
+			square.classList.add("depth");
+			square.innerText = (this.turn) ? "X" : "O";
 			this.turn = !this.turn;
+			this.checkWin(square);
 		}
+	},
+	checkWin(square) {
+		
 	}
 }
 
 for (let i = 0; i < 3; i++) {
+	tic.squares.push([]);
 	for (let j = 0; j < 3; j++) {
 		const square = document.createElement("div");
-		square.setAttribute("class", `square pointer row-${j+1} col-${i+1}`);
-		square.id = `square-${j}-${i}`;
-		square.onclick = ()=>tic.click(square);
+		square.setAttribute("class", `square pointer row-${i+1} col-${j+1}`);
+		square.id = `square-${i}-${j}`;
+		square.onclick = () => tic.click(square);
 		tic.board.appendChild(square);
+		tic.squares[i].push(square);
 	}	
 }
