@@ -5,7 +5,7 @@ html, body, #outer-container {
 body {
 	margin: 0;
 	padding: 0;
-	background-color: black;
+	background-color: #aaa;
 }
 
 #outer-container {
@@ -14,20 +14,86 @@ body {
 	align-items: center;
 }
 
-#tic-tac-toe-container {
+#tic-tac-toe-outer-container {
+	border-radius: 10px;
+	box-shadow: -2px 3px 15px 3px #777;
+
+}
+
+#tic-tac-toe-inner-container {
 	display: grid;
-	grid-template-columns: 100px 100px 100px;
-	grid-template-rows: 100px 100px 100px;
+	grid-template-columns: 20px 100px 100px 100px 20px;
+	grid-template-rows: 20px 100px 100px 100px 20px;
+	grid-gap: 15px;
+	border-radius: 10px;
+	background-color: white;
+
+	box-shadow: inset 2px -3px 15px 3px #777
+}
+
+.col-1.row-1 {
+	border-top-left-radius: 7px;
+}
+
+.col-3.row-1 {
+	border-top-right-radius: 7px;
+}
+
+.col-1.row-3 {
+	border-bottom-left-radius: 7px;
+}
+
+.col-3.row-3 {
+	border-bottom-right-radius: 7px;
+}
+
+.col-1 {
+	grid-column-start: 2;
+}
+
+.col-2 {
+	grid-column-start: 3;
+}
+
+.col-3 {
+	grid-column-start: 4;
+}
+
+.row-1 {
+	grid-row-start: 2;
+}
+
+.row-2 {
+	grid-row-start: 3;
+}
+
+.row-3 {
+	grid-row-start: 4;
 }
 
 .square {
 	height: 100px;
 	width: 100px;
-	border: 1px solid white;
-	color: white;
+	border: 2px solid transparent;
+	color: #777;
+	background-color: #fafafa;
 	font-size: 64px;
 	font-family: sans-serif;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	font-family: 'Montserrat', sans-serif;
+	border-radius: 2px;
+	cursor: default;
+	box-shadow: inset -2px 3px 10px 1px #777;
 }
+
+.selected {
+	border: 2px solid white;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+
