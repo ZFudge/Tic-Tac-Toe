@@ -1,0 +1,33 @@
+html, body, #outer-container {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background-color: black;
+}
+
+#outer-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#tic-tac-toe-container {
+	display: grid;
+	grid-template-columns: 100px 100px 100px;
+	grid-template-rows: 100px 100px 100px;
+}
+
+.square {
+	height: 100px;
+	width: 100px;
+	border: 1px solid white;
+	color: white;
+	font-size: 64px;
+	font-family: sans-serif;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
