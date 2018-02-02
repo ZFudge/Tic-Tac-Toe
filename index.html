@@ -7,9 +7,12 @@
 </head>
 <body>
 	<div id="outer-container">
-		<div></div>
-		<div id="tic-tac-toe-outer-container">
-			<div id="tic-tac-toe-inner-container"></div>
+		<div id="tic-tac-toe-container">
+			<div id="interface-container">
+				<p class="select" style="cursor: pointer;" onclick="">One Player</p>
+				<p class="select" style="cursor: pointer;" onclick="">Two Player</p>
+			</div>
+			<button id='restart' onclick="tic.restartGame()"></button>
 		</div>
 	</div>
 	<script type="text/javascript" src="t3.js"></script>
