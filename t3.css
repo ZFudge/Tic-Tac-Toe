@@ -15,6 +15,8 @@ body {
 }
 
 #tic-tac-toe-container {
+	font-family: 'Montserrat', sans-serif;
+	color: #444;
 	display: grid;
 	grid-template-columns: 10px 20px 100px 100px 100px 20px 10px;
 	grid-template-rows: 10px 20px 100px 100px 100px 20px 10px;
@@ -23,6 +25,7 @@ body {
 	box-sizing: border-box;
 	background-color: #DEF;
 	box-shadow: inset 2px -3px 15px 3px #777, -2px 2px 15px 1px #777;
+	user-select: none;
 }
 
 .col-1 {
@@ -43,18 +46,31 @@ body {
 .row-3 {
 	grid-row-start: 5;
 }
-#restart {
-	transition-duration: 0.2s;
+
+#reset-current-game {
+	grid-column-start: 3;
+	grid-row-start: 6;
+}
+#restart-all {
 	grid-column-start: 4;
 	grid-row-start: 6;
+}
+#misc {
+	grid-column-start: 5;
+	grid-row-start: 6;
+}
+
+button {
+	transition-duration: 0.2s;
 	border-radius: 20px;
 	box-shadow: inset 1px -3px 5px 0 #789, 0 1px 3px 0 #789;
 	cursor: pointer;
 	border: none;
 	outline: none;
 	display: none;
+
 }
-#restart:active {
+button:active {
 	box-shadow: inset 1px -1px 1px 0 #778899cc, 0 1px 1px 0 #789;
 }
 
@@ -81,8 +97,6 @@ body {
 .select {
 	font-size: 24px;
 	font-weight: bold;
-	color: #444;
-	font-family: 'Montserrat', sans-serif;
 	border-radius: 5px;
 	background-color: #DEF;
 }
@@ -105,8 +119,8 @@ body {
 	-webkit-background-clip: text;
 	-moz-background-clip: text;
 	background-clip: text;
-	user-select: none;
-
 }
 
-
+ p {
+ 	transition-duration: 1s;
+ }

@@ -9,10 +9,13 @@
 	<div id="outer-container">
 		<div id="tic-tac-toe-container">
 			<div id="interface-container">
-				<p class="select" style="cursor: pointer;" onclick="">One Player</p>
-				<p class="select" style="cursor: pointer;" onclick="">Two Player</p>
+				<h2>One or two players?</h2>
+				<p class="select" style="cursor: pointer;" onclick="interface.options(this)" data-player="true">One</p>
+				<p class="select" style="cursor: pointer;" onclick="interface.options(this)" data-player="false">Two</p>
 			</div>
-			<button id='restart' onclick="tic.restartGame()"></button>
+			<button id='restart-all' onclick="interface.restartAll()"></button>
+			<button id='reset-current-game' onclick="tic.restartCurrentGame()"></button>
+			<button id='misc' onclick=""></button>
 		</div>
 	</div>
 	<script type="text/javascript" src="t3.js"></script>
