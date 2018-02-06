@@ -3,19 +3,51 @@ const tic = {
 	turn: null,
 	players: "none",// true > 1, false > 2
 	coordinates: (square) => [parseInt(square.dataset.coordinates[0]),parseInt(square.dataset.coordinates[1])],
-	checkWin(c) {
-		console.log(c);
-		if (c[0] === c[1] || c[0] + c[1] === 2) {
-			if (c[0] === c[1] && c[0] + c[1] === 2) {
-				console.log('middle')
-			} else if (c[0] === c[1]) {
-				console.log("diagonal major");
-			} else {
-				console.log("diagonal minor");
+	checkWin(coordinates) {
+		const r = coordinates[0];
+		const c = coordinates[1];
+		if ((r+c) % 2 === 0) {
+			if (r === c) {
+					console.log('check MAJOR');
+				if (this.checkMoves([[0,0],[1,1],[2,2]])) { //(this.checkMajor()) {
+					return true;
+				}
 			}
-		} else {
-			console.log('edge')
+			if (r + c === 2) {
+					console.log('check MINOR');
+				if (this.checkMoves([[2,0],[1,1],[0,2]])) {
+					return true;
+				}
+			}
 		}
+		const rowAndColumn = this.getRowAndColumn(r,c);
+		console.log(rowAndColumn);
+		if (this.checkMoves(rowAndColumn[0])) {
+			return true;
+		}
+		if (this.checkMoves(rowAndColumn[1])) {
+			return true;
+		}
+		return false;
+	},
+	checkMoves(arr) {
+		return this.squares[arr[0][0]][arr[0][1]].innerHTML === this.squares[arr[1][0]][arr[1][1]].innerHTML && 
+		this.squares[arr[0][0]][arr[0][1]].innerHTML === this.squares[arr[2][0]][arr[2][1]].innerHTML;
+	},
+	getRowAndColumn(r,c) {
+		let row = [];
+		let column = [];
+		for (let i = 0; i < 3; i++) {
+			row.push([r,i]);
+			column.push([i,c]);
+		}
+		return [row,column];
+	},
+	checkMajor() {
+		return this.squares[0][0].innerHTML === this.squares[1][1].innerHTML && this.squares[0][0].innerHTML === this.squares[2][2].innerHTML;
+	},
+	checkMinor() {
+		return this.squares[2][0].innerHTML === this.squares[1][1].innerHTML && this.squares[2][0].innerHTML === this.squares[0][2].innerHTML;
 	},
 	resetCurrentGame() {
 		this.squares.forEach((arr) => arr.forEach((square) => { if (square.innerText) {
@@ -23,7 +55,7 @@ const tic = {
 			square.classList.remove("depth");
 			square.classList.add("pointer");
 		}}));
-	},
+	}
 }
 
 const interface = {
@@ -55,29 +87,32 @@ const interface = {
 		}
 	},
 	initializeGame() {
-		Object.entries(this.buttons).forEach((button) => {
-			button[1].style.display = "initial"; 
-			setTimeout(()=>button[1].style.opacity = 1);
-		});
-		this.content.style.display = "none";
-		this.body.style.color = "#def";
-		for (let i = 0; i < 3; i++) {
-			tic.squares.push([]);
-			for (let j = 0; j < 3; j++) {
-				const square = document.createElement("div");
-				square.setAttribute("class", `square pointer row-${i+1} col-${j+1}`);
-				square.setAttribute("data-coordinates", `${i}${j}`);
-				square.id = `square-${i}-${j}`;
-				square.onclick = () => this.click(square);
-				this.body.appendChild(square);
-				tic.squares[i].push(square);
-				setTimeout(()=>square.style.opacity = 1, 250);
-			}	
+		if (!tic.squares.length) {
+			Object.entries(this.buttons).forEach((button) => {
+				button[1].style.display = "initial"; 
+				setTimeout(()=>button[1].style.opacity = 1);
+			});
+			this.content.style.display = "none";
+			this.body.style.color = "#def";
+			for (let i = 0; i < 3; i++) {
+				tic.squares.push([]);
+				for (let j = 0; j < 3; j++) {
+					const square = document.createElement("div");
+					square.setAttribute("class", `square pointer row-${i+1} col-${j+1}`);
+					square.setAttribute("data-coordinates", `${i}${j}`);
+					square.id = `square-${i}-${j}`;
+					square.onclick = () => this.click(square);
+					this.body.appendChild(square);
+					tic.squares[i].push(square);
+					setTimeout(()=>square.style.opacity = 1, 250);
+				}	
+			}
+			setTimeout(()=>{
+			}, 250);
 		}
-		setTimeout(()=>{
-		}, 250);
 	},
 	restartAll() {
+		tic.squares = [];
 		while (this.body.children.length>4) this.body.removeChild(this.body.lastChild);
 		this.content.style.display = 'flex';
 		this.body.style.color = "#444";
@@ -99,7 +134,11 @@ const interface = {
 			square.classList.add("depth");
 			square.innerText = (tic.turn) ? "X" : "O";
 			tic.turn = !tic.turn;
-			tic.checkWin(tic.coordinates(square));
+			if (tic.checkWin(tic.coordinates(square))) {
+				console.log("WINNNNNNNNNNNNNNNNNNER")
+			}
 		}
 	}
 };
+
+
