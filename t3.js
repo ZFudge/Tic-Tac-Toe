@@ -60,6 +60,7 @@ const interface = {
 			setTimeout(()=>button[1].style.opacity = 1);
 		});
 		this.content.style.display = "none";
+		this.body.style.color = "#def";
 		for (let i = 0; i < 3; i++) {
 			tic.squares.push([]);
 			for (let j = 0; j < 3; j++) {
@@ -79,6 +80,7 @@ const interface = {
 	restartAll() {
 		while (this.body.children.length>4) this.body.removeChild(this.body.lastChild);
 		this.content.style.display = 'flex';
+		this.body.style.color = "#444";
 		tic.players = "none";
 		tic.turn = null;
 		Object.entries(this.buttons).forEach((button) => button[1].style.display = "none");

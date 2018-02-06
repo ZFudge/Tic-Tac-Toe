@@ -75,7 +75,7 @@ button:active {
 }
 
 .square {
-	transition-duration: 0.5s;
+	transition-duration: 0.2s;
 	height: 100px;
 	width: 100px;
 	font-size: 80px;
