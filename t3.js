@@ -1,34 +1,32 @@
 const tic = {
 	squares: [],
-	turn: null,
-	players: "none",// true > 1, false > 2
+	turn: null, // true -> X false -> O
+	active: true,
+	players: "none",// true -> 1, false -> 2
+	playerOne: null,
 	coordinates: (square) => [parseInt(square.dataset.coordinates[0]),parseInt(square.dataset.coordinates[1])],
 	checkWin(coordinates) {
 		const r = coordinates[0];
 		const c = coordinates[1];
 		if ((r+c) % 2 === 0) {
 			if (r === c) {
-					console.log('check MAJOR');
-				if (this.checkMoves([[0,0],[1,1],[2,2]])) { //(this.checkMajor()) {
-					return true;
-				}
+				if (this.checkMoves([[0,0],[1,1],[2,2]])) {return true;} //(this.checkMajor()) {
 			}
 			if (r + c === 2) {
-					console.log('check MINOR');
-				if (this.checkMoves([[2,0],[1,1],[0,2]])) {
-					return true;
-				}
+				if (this.checkMoves([[2,0],[1,1],[0,2]])) {return true;}
 			}
 		}
 		const rowAndColumn = this.getRowAndColumn(r,c);
 		console.log(rowAndColumn);
-		if (this.checkMoves(rowAndColumn[0])) {
-			return true;
+		return this.checkMoves(rowAndColumn[0]) || this.checkMoves(rowAndColumn[1]);
+	},
+	draw() {
+		for (let i = 0; i < 3; i++) {
+			for (let j = 0; j < 3; j++) {
+				if (this.squares[i][j].innerHTML === "") return false;
+			}
 		}
-		if (this.checkMoves(rowAndColumn[1])) {
-			return true;
-		}
-		return false;
+		return true;
 	},
 	checkMoves(arr) {
 		return this.squares[arr[0][0]][arr[0][1]].innerHTML === this.squares[arr[1][0]][arr[1][1]].innerHTML && 
@@ -50,17 +48,20 @@ const tic = {
 		return this.squares[2][0].innerHTML === this.squares[1][1].innerHTML && this.squares[2][0].innerHTML === this.squares[0][2].innerHTML;
 	},
 	resetCurrentGame() {
-		this.squares.forEach((arr) => arr.forEach((square) => { if (square.innerText) {
-			square.innerText = "";
-			square.classList.remove("depth");
-			square.classList.add("pointer");
-		}}));
+		this.squares.forEach((arr) => arr.forEach((square) => {
+			if (square.innerText) {
+				square.innerText = "";
+				square.classList.remove("depth");
+				square.classList.add("pointer");
+			}
+		}));
 	}
 }
 
 const interface = {
 	body: document.getElementById("tic-tac-toe-container"),
-	content: document.getElementById("interface-container"), 
+	contentContainer: document.getElementById("interface-container"),
+	header: document.getElementById("header"),
 	buttons: {
 		restartAll: document.getElementById("restart-all"),
 		resetCurrentGame: document.getElementById("reset-current-game"),
@@ -73,14 +74,17 @@ const interface = {
 			two: ["Player One, will you play as X or O?", "X", "O"]
 		}
 	},
+	// called from index.html. takes html p element as argument
 	options(input) {
-		const arr = Array.from(this.content.children);
+		const arr = Array.from(this.contentContainer.children);
 		if (tic.players === "none") {
-			tic.players = (input.dataset.player === "true");
-			arr.forEach((element,index) => interface.fadeReplace(element, (tic.players) ? interface.textSets.second.one[index] : interface.textSets.second.two[index]));
+			tic.players = (input.dataset.player === "true"); // true -> one false -> two
+			if (!tic.players) machine.active = true; 
+			arr.forEach((element,index) => interface.fadeReplace(element, (tic.players) ? interface.textSets.second.two[index] : interface.textSets.second.one[index]));
 			this.buttons.restartAll.style.display = "initial";
 			setTimeout(()=>this.buttons.restartAll.style.opacity = 1);
 		} else {
+			tic.playerOne = (input.dataset.player === "true");
 			tic.turn = (input.dataset.player === "true");
 			arr.forEach((element) => interface.fadeReplace(element, ""));
 			interface.initializeGame();
@@ -92,7 +96,7 @@ const interface = {
 				button[1].style.display = "initial"; 
 				setTimeout(()=>button[1].style.opacity = 1);
 			});
-			this.content.style.display = "none";
+			this.contentContainer.style.display = "none";
 			this.body.style.color = "#def";
 			for (let i = 0; i < 3; i++) {
 				tic.squares.push([]);
@@ -113,13 +117,16 @@ const interface = {
 	},
 	restartAll() {
 		tic.squares = [];
-		while (this.body.children.length>4) this.body.removeChild(this.body.lastChild);
-		this.content.style.display = 'flex';
-		this.body.style.color = "#444";
-		tic.players = "none";
 		tic.turn = null;
+		tic.active = true;
+		tic.players = "none";
+		machine.active = false;
+		this.header.innerHTML = "";
+		this.contentContainer.style.display = 'flex';
+		this.body.style.color = "#444";
+		while (this.body.children.length > 5) this.body.removeChild(this.body.lastChild);
 		Object.entries(this.buttons).forEach((button) => button[1].style.display = "none");
-		Array.from(this.content.children).forEach( (element,index) => interface.fadeReplace(element, interface.textSets.first[index]));
+		Array.from(this.contentContainer.children).forEach( (element,index) => interface.fadeReplace(element, interface.textSets.first[index]));
 	},
 	fadeReplace(tag, txt) {
 		tag.style.opacity = 0;
@@ -129,16 +136,31 @@ const interface = {
 		}, 500);
 	},
 	click(square) {
-		if (!square.innerHTML) {
+		if (!square.innerHTML && tic.active) {
 			square.classList.remove("pointer");
 			square.classList.add("depth");
-			square.innerText = (tic.turn) ? "X" : "O";
-			tic.turn = !tic.turn;
+			square.innerText = (tic.turn) ? "O" : "X";
 			if (tic.checkWin(tic.coordinates(square))) {
-				console.log("WINNNNNNNNNNNNNNNNNNER")
+				tic.active = false;
+				this.header.innerHTML = (tic.turn === tic.playerOne) ? "Player One Wins!" : (machine.active) ? "Computer Wins!" : "Player Two Wins!";
+				setTimeout(() => {
+					tic.restartGame();
+					tic.turn = !tic.turn;
+				}, 3000);
+			} else if (tic.draw()) {
+				this.header.innerHTML = "Cat Wins!";
+				setTimeout(() => tic.restartGame(), 3000);
+			} else {
+				(machine.active) ? machine.move() : tic.turn = !tic.turn;
 			}
 		}
 	}
 };
 
-
+const machine = {
+	active: false,
+	move() {
+		tic.turn = !tic.turn;
+		console.log('MOVE FOR COMPUTER')
+	}
+};
