@@ -43,7 +43,12 @@ const tic = {
 				square.classList.add("pointer");
 			}
 		}));
-		interface.statusChange();
+		if (machine.active && tic.turn === tic.playerOne) {
+			setTimeout(() => machine.move(),1000);
+		} else {
+			this.turn = !this.turn; 
+			interface.statusChange();
+		}
 	}
 }
 
@@ -126,7 +131,7 @@ const interface = {
 	statusChange() { // true => O, false => X same with playerOne
 		this.status.innerHTML = (tic.turn === tic.playerOne) ? "Player One's Turn" : (machine.active) ? "Computer's Turn" : "Player Two's Turn";
 	},
-	click(square) {
+	click(square, cont = true) {
 		if (!square.innerHTML && tic.active) {
 			square.classList.remove("pointer");
 			square.classList.add("depth");
@@ -135,24 +140,23 @@ const interface = {
 				tic.active = false;
 				this.status.innerHTML = (tic.turn === tic.playerOne) ? "Player One Wins!" : (machine.active) ? "Computer Wins!" : "Player Two Wins!";
 				setTimeout(() => {
-					this.status.innerHTML = "";
+					this.status.innerHTML = (tic.turn === tic.playerOne) ? (machine.active) ? "Computer's Turn" : "Player Two's Turn" : "Player One's Turn";
 					tic.active = true;
-					tic.turn = !tic.turn;
 					tic.restartCurrentGame();
 				}, 3000);
 			} else if (tic.draw()) {
 				tic.active = false;
 				this.status.innerHTML = "Cat Wins!";
 				setTimeout(() => {
-					this.status.innerHTML = "";
+					this.status.innerHTML = (tic.turn === tic.playerOne) ? (machine.active) ? "Computer's Turn" : "Player Two's Turn" : "Player One's Turn";
 					tic.active = true;
-					tic.turn = !tic.turn;
 					tic.restartCurrentGame();
 				}, 3000);
 			} else {
-				(machine.active) ? machine.move() : (
+				(machine.active && cont) ? machine.move() : (
 					tic.turn = !tic.turn,
-					this.statusChange());
+					this.statusChange()
+				);
 			}
 		}
 	}
@@ -163,92 +167,63 @@ const machine = {
 	move() {
 		tic.turn = !tic.turn;
 		interface.statusChange();
-		this.analyze();
+		setTimeout(()=>this.analyze(),1000);
 	},
 	analyze() {
-		console.log('Analyze');
 		const squArray = [];
 		tic.squares.forEach((row) => {
 			row.forEach((square) => {
-				if (!square.innerHTML) {
-					squArray.push([square, this.priority(tic.getRowAndColumn(square))]);
-				}
+				if (!square.innerHTML) squArray.push([square, this.priority(tic.getRowAndColumn(square))]);
 			});
 		});
 		console.log("Squarray: " + squArray);
-		loop = squArray;
-		/* choose move 
-		squArray.sort(function(a,b){
-			return a[1] - b[1];
-		});
-		let best = squArray;
-		interface.click(best);
-		
-		*/
+		if (squArray.length < 9) {
+			const choiceArray = [];
+			squArray.sort((a,b) => b[1] - a[1]).forEach((pair, index) => { 
+				(!choiceArray.length) ? choiceArray.push(pair) 
+				: (choiceArray[choiceArray.length-1][1] == pair[1]) ? choiceArray.push(pair):null
+			});
+			const best = choiceArray[Math.floor(Math.random() * choiceArray.length)][0];
+			interface.click(best,false);
+		} else {
+			interface.click(squArray[Math.floor(Math.random() * 9)][0], false);
+		}
 	},
 	priority(coordinatesArray) {
 		const row = coordinatesArray[0], column = coordinatesArray[1];
 		let sum = 0;
-
 		if ((row+column) % 2 === 0) { // square is a corner or middle
 			if (row === column) 	sum += this.getPoints([[0,0],[1,1],[2,2]]);//if (this.getPoints() return true; // Major Diagonal
 			if (row + column === 2) sum += this.getPoints([[2,0],[1,1],[0,2]]);//if (this.getPoints() return true; // Minor Diagonal
 		}
-
 		const rowAndColumn = tic.getRowAndColumnNeighbors(row,column);
-
 		sum += this.getPoints(rowAndColumn[0]);
 		sum += this.getPoints(rowAndColumn[1]);
-
-		console.log("sum: " + sum);
 		return sum;
 	},
 	getPoints(arr) {
 		let points = 0;
-		
 		const profile = arr.reduce(function(obj, innerArr) {
-			if (tic.squares[innerArr[0]][innerArr[1]].innerHTML != "") {
-				obj[tic.squares[innerArr[0]][innerArr[1]].innerHTML]++;
-			}
+			if (tic.squares[innerArr[0]][innerArr[1]].innerHTML != "") obj[tic.squares[innerArr[0]][innerArr[1]].innerHTML]++;
 			return obj;
 		}, { "X" : 0, "O" : 0 });
-
 		if (profile["X"] === profile["O"]) { // three empty or unmatching pair
 			if (profile["X"] === 0) points = 0.5;
 		} else { // one or matching pair
 			if (tic.turn) { // "O"
 				if (profile["O"] > 0) {
-					(profile["O"] === 2) ? points = 2.5 : points = 1.5;
+					(profile["O"] === 2) ? points = 3.5 : points = 1.5;
 				} else {
-					(profile["X"] === 2) ? points = 2 : points = 1;
+					(profile["X"] === 2) ? points = 3 : points = 1;
 				}
 			} else { // "X"
 				if (profile["X"] > 0) {
-					(profile["X"] === 2) ? points = 2.5 : points = 1.5;
+					(profile["X"] === 2) ? points = 3.5 : points = 1.5;
 				} else {
-					(profile["O"] === 2) ? points = 2 : points = 1;
+					(profile["O"] === 2) ? points = 3 : points = 1;
 				}
 			}
 		}
-		console.log("Points: " + points);
 		return points;
-		// if (tic.squares[arr[0][0]][arr[0][1]].innerHTML === "O") {} else if (tic.squares[arr[0][0]][arr[0][1]].innerHTML === "X") {}
 	}
 };
-
-/* 
-	two of same			2.5
-	two of different	2
-	one of same			1.5
-	one of different	1
-	less than three*		0.5
-*empty
-
-3 	1.5 "O"
-2  	1.5	1.5
-"x"	2	3
-
-2	1	2
-1.5	2.5	1
-"O"	1.5 2
-  */
