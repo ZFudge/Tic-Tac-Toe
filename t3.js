@@ -9,15 +9,10 @@ const tic = {
 		const r = coordinates[0];
 		const c = coordinates[1];
 		if ((r+c) % 2 === 0) {
-			if (r === c) {
-				if (this.checkMoves([[0,0],[1,1],[2,2]])) {return true;} //(this.checkMajor()) {
-			}
-			if (r + c === 2) {
-				if (this.checkMoves([[2,0],[1,1],[0,2]])) {return true;}
-			}
+			if (r === c) if (this.checkMoves([[0,0],[1,1],[2,2]])) return true; //(this.checkMajor()) {
+			if (r + c === 2) if (this.checkMoves([[2,0],[1,1],[0,2]])) return true;
 		}
 		const rowAndColumn = this.getRowAndColumn(r,c);
-		console.log(rowAndColumn);
 		return this.checkMoves(rowAndColumn[0]) || this.checkMoves(rowAndColumn[1]);
 	},
 	draw() {
@@ -41,13 +36,7 @@ const tic = {
 		}
 		return [row,column];
 	},
-	checkMajor() {
-		return this.squares[0][0].innerHTML === this.squares[1][1].innerHTML && this.squares[0][0].innerHTML === this.squares[2][2].innerHTML;
-	},
-	checkMinor() {
-		return this.squares[2][0].innerHTML === this.squares[1][1].innerHTML && this.squares[2][0].innerHTML === this.squares[0][2].innerHTML;
-	},
-	resetCurrentGame() {
+	restartCurrentGame() {
 		this.squares.forEach((arr) => arr.forEach((square) => {
 			if (square.innerText) {
 				square.innerText = "";
@@ -55,13 +44,14 @@ const tic = {
 				square.classList.add("pointer");
 			}
 		}));
+		interface.statusChange();
 	}
 }
 
 const interface = {
 	body: document.getElementById("tic-tac-toe-container"),
 	contentContainer: document.getElementById("interface-container"),
-	header: document.getElementById("header"),
+	status: document.getElementById("status"),
 	buttons: {
 		restartAll: document.getElementById("restart-all"),
 		resetCurrentGame: document.getElementById("reset-current-game"),
@@ -111,8 +101,7 @@ const interface = {
 					setTimeout(()=>square.style.opacity = 1, 250);
 				}	
 			}
-			setTimeout(()=>{
-			}, 250);
+			this.statusChange();
 		}
 	},
 	restartAll() {
@@ -121,7 +110,7 @@ const interface = {
 		tic.active = true;
 		tic.players = "none";
 		machine.active = false;
-		this.header.innerHTML = "";
+		this.status.innerHTML = "";
 		this.contentContainer.style.display = 'flex';
 		this.body.style.color = "#444";
 		while (this.body.children.length > 5) this.body.removeChild(this.body.lastChild);
@@ -135,6 +124,9 @@ const interface = {
 			tag.style.opacity = 1;
 		}, 500);
 	},
+	statusChange() { // true => O, false => X same with playerOne
+		this.status.innerHTML = (tic.turn === tic.playerOne) ? "Player One's Turn" : (machine.active) ? "Computer's Turn" : "Player Two's Turn";
+	},
 	click(square) {
 		if (!square.innerHTML && tic.active) {
 			square.classList.remove("pointer");
@@ -142,16 +134,26 @@ const interface = {
 			square.innerText = (tic.turn) ? "O" : "X";
 			if (tic.checkWin(tic.coordinates(square))) {
 				tic.active = false;
-				this.header.innerHTML = (tic.turn === tic.playerOne) ? "Player One Wins!" : (machine.active) ? "Computer Wins!" : "Player Two Wins!";
+				this.status.innerHTML = (tic.turn === tic.playerOne) ? "Player One Wins!" : (machine.active) ? "Computer Wins!" : "Player Two Wins!";
 				setTimeout(() => {
-					tic.restartGame();
+					this.status.innerHTML = "";
+					tic.active = true;
 					tic.turn = !tic.turn;
+					tic.restartCurrentGame();
 				}, 3000);
 			} else if (tic.draw()) {
-				this.header.innerHTML = "Cat Wins!";
-				setTimeout(() => tic.restartGame(), 3000);
+				tic.active = false;
+				this.status.innerHTML = "Cat Wins!";
+				setTimeout(() => {
+					this.status.innerHTML = "";
+					tic.active = true;
+					tic.turn = !tic.turn;
+					tic.restartCurrentGame();
+				}, 3000);
 			} else {
-				(machine.active) ? machine.move() : tic.turn = !tic.turn;
+				(machine.active) ? machine.move() : (
+					tic.turn = !tic.turn,
+					this.statusChange());
 			}
 		}
 	}
@@ -161,6 +163,7 @@ const machine = {
 	active: false,
 	move() {
 		tic.turn = !tic.turn;
+		interface.statusChange();
 		console.log('MOVE FOR COMPUTER')
 	}
 };
