@@ -6,17 +6,16 @@
 	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 </head>
 <body>
-	<div id="outer-container">
-		<div id="tic-tac-toe-container">
-			<div id="interface-container">
-				<h2>One or two players?</h2>
-				<p class="select" style="cursor: pointer;" onclick="interface.options(this)" data-player="true">One</p>
-				<p class="select" style="cursor: pointer;" onclick="interface.options(this)" data-player="false">Two</p>
-			</div>
-			<button id='restart-all' onclick="interface.restartAll()"></button>
-			<button id='reset-current-game' onclick="tic.restartCurrentGame()"></button>
-			<button id='misc' onclick=""></button>
+	<div id="tic-tac-toe-container">
+		<div id="status"></div>
+		<div id="interface-container">
+			<h2>One or two players?</h2>
+			<p class="select" style="cursor: pointer;" onclick="interface.options(this)" data-player="false">One</p>
+			<p class="select" style="cursor: pointer;" onclick="interface.options(this)" data-player="true">Two</p>
 		</div>
+		<button id='restart-all' onclick="interface.restartAll()">Reset</button>
+		<button id='reset-current-game' onclick="tic.restartCurrentGame()">New Game</button>
+		<button id='misc' onclick=""></button>
 	</div>
 	<script type="text/javascript" src="t3.js"></script>
 </body>
