@@ -5,7 +5,7 @@ html, body, #outer-container {
 body {
 	margin: 0;
 	padding: 0;
-	background-color: #deeeff;
+	background-color: #EEE;
 	font-weight: bold;
 }
 
@@ -22,12 +22,12 @@ body, .square {
 	grid-template-columns: 50px 100px 100px 100px 50px;
 	grid-template-rows: 10px 50px 100px 100px 100px 25px 10px;
 	grid-gap: 20px;
-	border-radius: 10px;
+	border-radius: 50px;
 	box-sizing: border-box;
-	background-color: #DEF;
-	box-shadow: inset 2px -3px 15px 3px #777, -2px 2px 15px 1px #777;
+	background-color: #EEE;
 	user-select: none;
 	text-align: center;
+	box-shadow: inset -3px -5px 13px 0 #00000066, inset 3px -5px 13px 0 #00000066, inset 0 8px 5px 0 #FFFFFF88, 0 4px 2px 0 rgba(0, 0, 0, 0.7);
 }
 
 #status {
@@ -70,13 +70,13 @@ body, .square {
 
 button {
 	border-radius: 20px;
-	box-shadow: inset 1px -3px 5px 0 #789, 0 1px 3px 0 #789;
+	box-shadow: inset 1px -3px 5px 0 #444, 0 2px 3px 0 #444;
 	cursor: pointer;
 	border: none;
 	outline: none;
 	display: none;
 	opacity: 0;
-	color: #333;
+	color: #444;
 	font-weight: bold;
 }
 button:active {
@@ -94,13 +94,9 @@ button:active {
 	width: 100px;
 	font-size: 80px;
 	font-family: 'Montserrat', sans-serif;
-	border-radius: 5px;
-	cursor: default;
-	border: 1px solid #aaa;
-	border-left: 1px solid #bbb;
-	border-bottom: 1px solid #bbb;
-	box-shadow: inset -2px 2px 15px 2px #999, 2px -2px 10px 1px #999;
-	background-color: #DEF;
+	border-radius: 30px;
+	box-shadow: -1px -3px 13px 0 #00000066, 1px -3px 13px 0 #00000066, 0 5px 10px 0 #FFFFFFAA, inset 0 3px 5px 0 #666;
+	background-color: #EEE;
 	opacity: 0;
 }
 
@@ -112,7 +108,7 @@ button:active {
 	font-size: 24px;
 	font-weight: bold;
 	border-radius: 5px;
-	background-color: #DEF;
+	background-color: #EEE;
 }
 
 #interface-container {
@@ -130,7 +126,7 @@ button:active {
 .depth {
 	background-color: #999;
 	color: rgba(0,0,0,0);
-	text-shadow: -3px 2.5px 3px #DEF; /* #c2d1e0 */
+	text-shadow: -3px 2.5px 3px #EEE; /* #c2d1e0 */
 	-webkit-background-clip: text;
 	-moz-background-clip: text;
 	background-clip: text;
