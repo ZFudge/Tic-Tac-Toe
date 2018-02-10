@@ -50,15 +50,6 @@ const tic = {
 		this.squares = [];
 		while (interface.body.children.length > 5) interface.body.removeChild(interface.body.lastChild);
 		interface.initializeGame();
-		/*this.squares.forEach((arr) => arr.forEach((square) => {
-			if (square.innerText) {
-				square.innerText = "";
-				square.classList.remove("depth");
-				square.classList.add("pointer");
-				square.style.backgroundColor = "#DEF";
-				square.style.textShadow = "-3px 2.5px 3px #DEF";
-			}
-		})); */
 		if (machine.active && tic.turn === tic.playerOne) {
 			setTimeout(() => machine.move(),1000);
 		} else {
@@ -68,8 +59,8 @@ const tic = {
 	},
 	highlight(arr) {
 		arr.forEach((coordinates) => {
-			this.squares[coordinates[0]][coordinates[1]].style.backgroundColor = "#F55";
-			this.squares[coordinates[0]][coordinates[1]].style.textShadow = "-3px 2.5px 3px #36f";
+			this.squares[coordinates[0]][coordinates[1]].style.backgroundColor = (tic.turn) ? "#F55" : "#36F";
+			this.squares[coordinates[0]][coordinates[1]].style.textShadow = (tic.turn) ? "-3px 2.5px 3px #36f" : "-3px 2.5px 3px #F55";
 		})
 	}
 }
