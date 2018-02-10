@@ -58,10 +58,12 @@ const tic = {
 		}
 	},
 	highlight(arr) {
+		if (Math.random() < 0.5) [arr[0][0],arr[0][1],arr[2][0],arr[2][1]] = [arr[2][0],arr[2][1],arr[0][0],arr[0][1]]; // randomizes start and finish
 		line.cross(arr[0][0],arr[0][1],arr[2][0],arr[2][1]);
 		arr.forEach((coordinates) => {
 			this.squares[coordinates[0]][coordinates[1]].style.backgroundColor = (tic.turn) ? "#F55" : "#36F";
 			this.squares[coordinates[0]][coordinates[1]].style.textShadow = (tic.turn) ? "-3px 2.5px 3px #36f" : "-3px 2.5px 3px #F55";
+			this.squares[coordinates[0]][coordinates[1]].style.borderRadius = "50px";
 		})
 	}
 }
@@ -192,6 +194,9 @@ const machine = {
 			});
 		});
 		console.log("Squarray: " + squArray);
+		Array.from(squArray.sort((a,b) => b[1] - a[1])).forEach((sq) => {
+			console.log(sq[0].id,sq[1],"");
+		});
 		if (squArray.length < 9) {
 			const choiceArray = [];
 			squArray.sort((a,b) => b[1] - a[1]).forEach((pair, index) => { 
@@ -210,9 +215,8 @@ const machine = {
 		if ((row+column) % 2 === 0) { // square is a corner or middle
 			if (row === column) 	sum += this.getPoints([[0,0],[1,1],[2,2]]);	// Major Diagonal
 			if (row + column === 2) sum += this.getPoints([[2,0],[1,1],[0,2]]);	// Minor Diagonal
-			if (tic.count === 6) {
-				if (row+column != 2 || row != 1|| column != 1) sum -= 1.5;
-			}
+			const letter = (tic.playerOne) ? "X" : "O";
+			if (tic.count === 6 && (row+column != 2 || row != 1|| column != 1) && tic.squares[1][1].innerHTML == letter) sum -= 1.5;
 		}
 		const rowAndColumn = tic.getRowAndColumnNeighbors(row,column);
 		sum += this.getPoints(rowAndColumn[0]);
@@ -245,3 +249,5 @@ const machine = {
 		return points;
 	}
 };
+
+line.context.fillStyle = '#111';
