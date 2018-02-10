@@ -48,7 +48,7 @@ const tic = {
 	restartCurrentGame() {
 		this.count = 9;
 		this.squares = [];
-		while (interface.body.children.length > 5) interface.body.removeChild(interface.body.lastChild);
+		while (interface.body.children.length > 6) interface.body.removeChild(interface.body.lastChild);
 		interface.initializeGame();
 		if (machine.active && tic.turn === tic.playerOne) {
 			setTimeout(() => machine.move(),1000);
@@ -58,6 +58,7 @@ const tic = {
 		}
 	},
 	highlight(arr) {
+		line.cross(arr[0][0],arr[0][1],arr[2][0],arr[2][1]);
 		arr.forEach((coordinates) => {
 			this.squares[coordinates[0]][coordinates[1]].style.backgroundColor = (tic.turn) ? "#F55" : "#36F";
 			this.squares[coordinates[0]][coordinates[1]].style.textShadow = (tic.turn) ? "-3px 2.5px 3px #36f" : "-3px 2.5px 3px #F55";
@@ -129,7 +130,7 @@ const interface = {
 		this.status.innerHTML = "";
 		this.contentContainer.style.display = 'flex';
 		this.body.style.color = "#444";
-		while (this.body.children.length > 5) this.body.removeChild(this.body.lastChild);
+		while (this.body.children.length > 6) this.body.removeChild(this.body.lastChild);
 		Object.entries(this.buttons).forEach((button) => button[1].style.display = "none");
 		Array.from(this.contentContainer.children).forEach( (element,index) => interface.fadeReplace(element, interface.textSets.first[index]));
 	},
@@ -155,6 +156,7 @@ const interface = {
 				setTimeout(() => {
 					this.status.innerHTML = (tic.turn === tic.playerOne) ? (machine.active) ? "Computer's Turn" : "Player Two's Turn" : "Player One's Turn";
 					tic.active = true;
+					line.clear();
 					tic.restartCurrentGame();
 				}, 3000);
 			} else if (tic.count === 0) {

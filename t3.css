@@ -83,6 +83,11 @@ button:active {
 	box-shadow: inset 1px -1px 1px 0 #778899cc, 0 1px 1px 0 #789;
 }
 
+#cross-canvas {
+	grid-area: 3 / 2 / 6 / 5;
+	pointer-events: none;
+}
+
 .square {
 	transition-duration: 0.2s;
 	height: 100px;
