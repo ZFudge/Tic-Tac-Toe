@@ -51,7 +51,7 @@ const tic = {
 		while (interface.body.children.length > 5) interface.body.removeChild(interface.body.lastChild);
 		interface.initializeGame();
 		if (machine.active && tic.turn === tic.playerOne) {
-			setTimeout(() => machine.move(),1000);
+			setTimeout(() => machine.move(), 0);
 		} else {
 			this.turn = !this.turn; 
 			interface.statusChange();
@@ -153,21 +153,19 @@ const interface = {
 			tic.count--;
 			if (tic.checkWin(tic.getRowAndColumn(square))) {
 				tic.active = false;
-				this.status.innerHTML = (tic.turn === tic.playerOne) ? "Player One Wins!" : (machine.active) ? "Computer Wins!" : "Player Two Wins!";
 				setTimeout(() => {
-					this.status.innerHTML = (tic.turn === tic.playerOne) ? (machine.active) ? "Computer's Turn" : "Player Two's Turn" : "Player One's Turn";
 					tic.active = true;
 					line.clear();
 					tic.restartCurrentGame();
-				}, 3000);
+				}, 1000);
 			} else if (tic.count === 0) {
 				tic.active = false;
-				this.status.innerHTML = "Cat Wins!";
+				this.status.innerHTML = "Nobody Wins!";
 				setTimeout(() => {
-					this.status.innerHTML = (tic.turn === tic.playerOne) ? (machine.active) ? "Computer's Turn" : "Player Two's Turn" : "Player One's Turn";
+					this.statusChange() //this.status.innerHTML = (tic.turn === tic.playerOne) ? (machine.active) ? "Computer's Turn" : "Player Two's Turn" : "Player One's Turn";
 					tic.active = true;
 					tic.restartCurrentGame();
-				}, 3000);
+				}, 1000);
 			} else {
 				(machine.active && cont) ? machine.move() : (
 					tic.turn = !tic.turn,
@@ -180,10 +178,11 @@ const interface = {
 
 const machine = {
 	active: false,
+	reactionTime: 250,
 	move() {
 		tic.turn = !tic.turn;
 		interface.statusChange();
-		setTimeout(()=>this.analyze(),1000);
+		setTimeout(()=>this.analyze(), this.reactionTime);
 	},
 	analyze() {
 		const squArray = [];
@@ -192,7 +191,7 @@ const machine = {
 				if (!square.innerHTML) squArray.push([square, this.priority(tic.getRowAndColumn(square))]);
 			});
 		});
-		Array.from(squArray.sort((a,b) => b[1] - a[1])).forEach((sq) => console.log(sq[0].id,sq[1],""));
+		//Array.from(squArray.sort((a,b) => b[1] - a[1])).forEach((sq) => console.log(sq[0].id,sq[1],""));
 		if (squArray.length < 9) {
 			const choiceArray = [];
 			squArray.sort((a,b) => b[1] - a[1]).forEach((pair, index) => { 
