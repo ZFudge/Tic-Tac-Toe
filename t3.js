@@ -45,7 +45,7 @@ const tic = {
 		}
 		return [rowArray,columnArray];
 	},
-	restartCurrentGame() {
+	newGame() {
 		this.count = 9;
 		this.squares = [];
 		while (interface.body.children.length > 5) interface.body.removeChild(interface.body.lastChild);
@@ -156,15 +156,15 @@ const interface = {
 				setTimeout(() => {
 					tic.active = true;
 					line.clear();
-					tic.restartCurrentGame();
-				}, 1000);
+					tic.newGame();
+				}, 1500);
 			} else if (tic.count === 0) {
 				tic.active = false;
 				this.status.innerHTML = "Nobody Wins!";
 				setTimeout(() => {
 					this.statusChange() //this.status.innerHTML = (tic.turn === tic.playerOne) ? (machine.active) ? "Computer's Turn" : "Player Two's Turn" : "Player One's Turn";
 					tic.active = true;
-					tic.restartCurrentGame();
+					tic.newGame();
 				}, 1000);
 			} else {
 				(machine.active && cont) ? machine.move() : (
@@ -221,7 +221,7 @@ const machine = {
 	getPoints(arr) {
 		let points = 0;
 		const profile = arr.reduce(function(obj, innerArr) {
-			if (tic.squares[innerArr[0]][innerArr[1]].innerHTML != "") obj[tic.squares[innerArr[0]][innerArr[1]].innerHTML]++;
+			if (tic.squares[innerArr[0]][innerArr[1]].innerHTML != "") obj[tic.squares[innerArr[0]][innerArr[1]].innerHTML]++; // increment obj["X"]||obj["O"]
 			return obj;
 		}, { "X" : 0, "O" : 0 });
 		if (profile["X"] === profile["O"]) { // three empty or unmatching pair
@@ -229,13 +229,13 @@ const machine = {
 		} else { // one or matching pair
 			if (tic.turn) { // "O"
 				if (profile["O"] > 0) {
-					(profile["O"] === 2) ? points = 6.5 : points = 2.5;
+					(profile["O"] === 2) ? points = 9.5 : points = 2.5;
 				} else {
 					(profile["X"] === 2) ? points = 4 : points = 1;
 				}
 			} else { // "X"
 				if (profile["X"] > 0) {
-					(profile["X"] === 2) ? points = 6.5 : points = 2.5;
+					(profile["X"] === 2) ? points = 9.5 : points = 2.5;
 				} else {
 					(profile["O"] === 2) ? points = 4 : points = 1;
 				}
