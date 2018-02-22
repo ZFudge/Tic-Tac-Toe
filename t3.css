@@ -2,20 +2,34 @@ html, body, #outer-container {
 	height: 100%;
 }
 
+#nav-placeholder object {
+  width: 100%;
+}
+#nav-placeholder {
+  width: 100%;
+  align-self: flex-end;
+}
+
 body {
 	margin: 0;
 	padding: 0;
 	background-color: #EEE;
 	font-weight: bold;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
-body, .square {
+.square {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
 
 #tic-tac-toe-container {
+    width: 30em;
+    margin: 0 auto;
 	font-family: 'Montserrat', sans-serif;
 	color: #444;
 	display: grid;

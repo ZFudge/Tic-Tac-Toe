@@ -6,6 +6,7 @@
 	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 </head>
 <body>
+	<div id="nav-placeholder"></div>
 	<div id="tic-tac-toe-container">
 		<div id="status"></div>
 		<div id="interface-container">
@@ -19,5 +20,8 @@
 	</div>
 	<script type="text/javascript" src="cross.js"></script>
 	<script type="text/javascript" src="t3.js"></script>
+    <script>
+		document.getElementById('nav-placeholder').innerHTML = '<object type="text/html" data="../nav.html" ></object>';
+	</script>
 </body>
 </html>
