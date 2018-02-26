@@ -2,12 +2,13 @@ html, body, #outer-container {
 	height: 100%;
 }
 
-#nav-placeholder object {
-  width: 100%;
-}
 #nav-placeholder {
-  width: 100%;
-  align-self: flex-end;
+  	width: 100%;
+  	max-width: 800px;
+  	margin: 0 auto;
+}
+#nav-placeholder object {
+  	width: 100%;
 }
 
 body {
