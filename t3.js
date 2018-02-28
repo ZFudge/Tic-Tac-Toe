@@ -157,7 +157,7 @@ const interface = {
 					tic.active = true;
 					line.clear();
 					tic.newGame();
-				}, 1500);
+				}, 2000);
 			} else if (tic.count === 0) {
 				tic.active = false;
 				this.status.innerHTML = "Nobody Wins!";
